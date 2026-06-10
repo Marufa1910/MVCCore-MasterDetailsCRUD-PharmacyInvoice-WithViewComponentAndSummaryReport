@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Invoice>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Invoice List</h1>
+<p>
+    @await Component.InvokeAsync("HeadCount")
+</p>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Invoice No</th>
+            <th>Date</th>
+            <th>Client Name</th>
+            <th>Referrer</th>
+            <th>Type</th>
+            <th>Sale Items (Medicine - Qty x Price)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@Url.Content(item.ImageUrl)" width="50" height="50" />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/images/noimage.png")" width="50" height="50" />
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.InvoiceNo)</td>
+                <td>@item.TransactionDate.ToShortDateString()</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                    (@(item.IsNewClient ? "New Client" : "Old Client"))
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.ReferrerName)</td>
+                <td>@Html.DisplayFor(modelItem => item.TransactionType.TransactionTypeName)</td>
+                <td>
+                    <ul>
+                        @foreach (var sale in item.SaleItems)
+                        {
+                            <li>
+                                @sale.MedicineName - @sale.Quantity x @sale.UnitPrice
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-info">Edit</a> |
+
+                    <form asp-action="Delete" asp-route-id="@item.InvoiceId" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

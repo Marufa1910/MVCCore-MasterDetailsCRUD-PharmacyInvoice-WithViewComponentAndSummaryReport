@@ -1,0 +1,87 @@
+﻿@model InvoiceViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="createForm" asp-action="Create" enctype="multipart/form-data">
+    <div class="row">
+        <h1>Create New Invoice</h1><hr />
+
+        <div class="col-md-1"></div>
+
+        <div class="col-md-6">
+            <h4>Master Info</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-2">
+                <label asp-for="InvoiceNo" class="control-label"></label>
+                <input asp-for="InvoiceNo" class="form-control" />
+                <span asp-validation-for="InvoiceNo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="TransactionDate" class="control-label"></label>
+                <input asp-for="TransactionDate" class="form-control" type="date" />
+                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="ClientName" class="control-label"></label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="ReferrerName" class="control-label"></label>
+                <input asp-for="ReferrerName" class="form-control" />
+                <span asp-validation-for="ReferrerName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsNewClient" /> @Html.DisplayNameFor(model => model.IsNewClient)
+                </label>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="TransactionTypeId" class="control-label">Transaction Type</label>
+                <select asp-for="TransactionTypeId" class="form-control" asp-items="@(new SelectList(Model.TransactionTypes, "TransactionTypeId", "TransactionTypeName"))">
+                    <option value="">Select Type</option>
+                </select>
+                <span asp-validation-for="TransactionTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label class="fw-bold small d-block">Profile Image Preview</label>
+                <img id="createImagePreview" src="~/images/noimage.png"
+                     width="100" height="100" class="img-thumbnail mb-2" style="object-fit: cover;" />
+                <input type="file" name="ProfileFile" id="ProfileFile" class="form-control form-control-sm" onchange="readUrl(this)" />
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" onclick="CreateNewInvoice()" class="btn btn-primary">Create Invoice</button>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h4>Details Info</h4>
+            <button onclick="AddItem()" type="button" class="btn btn-success mb-2">Add Medicine</button>
+
+
+            <div id="itemsContainer">
+                @Html.Partial("_SaleItemsTable", Model.SaleItems)
+            </div>
+
+            @* Hidden field to track the number of items for indexing *@
+            <input type="hidden" id="hdnLastIndex" value="@Model.SaleItems.Count" />
+        </div>
+    </div>
+</form>
+
+<div class="row pb-5">
+    <div class="d-flex justify-content-end">
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    </div>
+</div>
+

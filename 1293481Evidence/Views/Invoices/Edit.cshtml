@@ -1,0 +1,114 @@
+﻿@model InvoiceViewModel
+
+@{
+    ViewData["Title"] = "Edit Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form id="editForm" asp-action="Edit" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-12">
+            <h1>Edit Invoice</h1>
+            <hr />
+        </div>
+
+        <div class="col-md-1"></div>
+
+        <div class="col-md-6">
+            <h4>Master Info</h4>
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="InvoiceId" />
+            <input type="hidden" name="OldImageUrl" value="@Model.ImageUrl" />
+
+            <div class="form-group mb-2">
+                <label asp-for="InvoiceNo" class="control-label"></label>
+                <input asp-for="InvoiceNo" class="form-control" />
+                <span asp-validation-for="InvoiceNo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="TransactionDate" class="control-label"></label>
+                <input asp-for="TransactionDate" class="form-control" type="date" />
+                <span asp-validation-for="TransactionDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="ClientName" class="control-label"></label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-2">
+                <label asp-for="ReferrerName" class="control-label"></label>
+                <input asp-for="ReferrerName" class="form-control" />
+                <span asp-validation-for="ReferrerName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check mb-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsNewClient" /> @Html.DisplayNameFor(model => model.IsNewClient)
+                </label>
+                <span asp-validation-for="IsNewClient" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="TransactionTypeId" class="control-label">Transaction Type</label>
+                <select asp-for="TransactionTypeId" class="form-control"
+                        asp-items="@(new SelectList(Model.TransactionTypes, "TransactionTypeId", "TransactionTypeName", Model.TransactionTypeId))">
+                    <option value="">Select Type</option>
+                </select>
+                <span asp-validation-for="TransactionTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="row align-items-center mt-3 p-2 border rounded bg-light">
+                <div class="col-8">
+                    <div class="mb-3">
+                        <label for="ProfileFile" class="form-label fw-bold">Update Image</label>
+                        <input name="ProfileFile" type="file" class="form-control" id="ProfileFile" onchange="readUrl(this)">
+                        <span asp-validation-for="ProfileFile" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-4 text-center">
+                    @* FIX: Url.Content is required to resolve the "~/images/" path for the browser *@
+                    <img id="createImagePreview"
+                         src="@(string.IsNullOrEmpty(Model.ImageUrl) ? Url.Content("~/images/noimage.png") : Url.Content(Model.ImageUrl))"
+                         alt="Preview"
+                         class="img-thumbnail"
+                         style="width: 80px; height: 80px; object-fit: cover;">
+                </div>
+            </div>
+
+            @* FIX: This hidden field ensures the controller receives the existing path if no new file is uploaded *@
+            <input type="hidden" name="OldImageUrl" value="@Model.ImageUrl" />
+
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" onclick="UpdateInvoice()" class="btn btn-primary px-4">Update Invoice</button>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <h4>Details Info</h4>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted small">Medicine Items</span>
+                <button onclick="AddItem()" type="button" class="btn btn-success btn-sm">Add Medicine</button>
+            </div>
+
+            <div id="itemsContainer">
+                @Html.Partial("_SaleItemsTable", Model.SaleItems)
+            </div>
+
+            <input type="hidden" id="hdnLastIndex" value="@Model.SaleItems.Count" />
+            @* Important: validation message for the collection if required *@
+            <span asp-validation-for="SaleItems" class="text-danger"></span>
+        </div>
+    </div>
+</form>
+
+<div class="row pb-5 mt-3">
+    <div class="col-12 d-flex justify-content-end">
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    </div>
+</div>
+

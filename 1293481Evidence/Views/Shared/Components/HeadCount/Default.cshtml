@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SaleItemHeadCount>
+
+<h3>Client Order Summary</h3>
+<table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th align="left">Client Name</th>
+            <th align="center">Order Headcount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ClientName</td>
+                <td align="center">@item.TotalQuantity</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr style="font-weight:bold;">
+            <td>Total Order Count</td>
+            <td align="center">@Model.Sum(x => x.TotalQuantity)</td>
+        </tr>
+    </tfoot>
+</table>

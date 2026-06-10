@@ -1,0 +1,60 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Executive Summary Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Summary Report With Aggregate Function</h2>
+<br />
+<hr />
+
+
+<h3>Overall Performance Statistics</h3>
+<table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+    <thead>
+        <tr>
+            <th>Medicine Min Price</th>
+            <th>Medicine Max Price</th>
+            <th>Total Revenue</th>
+            <th>Medicine Average Price</th>
+            <th>Total Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.MinValue.ToString("C2")</td>
+            <td>@Model.MaxValue.ToString("C2")</td>
+            <td>@Model.SumValue.ToString("C2")</td>
+            <td>@Model.AvgValue.ToString("C2")</td>
+            <td>@Model.Count</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h3>Breakdown by Transaction Type</h3>
+<table border="1" cellpadding="5" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th>Transaction Type</th>
+            <th>Min price</th>
+            <th>Max price</th>
+            <th>Total (Sum)</th>
+            <th>Average price</th>
+            <th>Frequency</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GroupByAggregateViewModelResult)
+        {
+            <tr>
+                <td><strong>@item.TransactionTypeName</strong></td>
+                <td>@item.MinValue.ToString("C2")</td>
+                <td>@item.MaxValue.ToString("C2")</td>
+                <td>@item.SumValue.ToString("C2")</td>
+                <td>@item.AvgValue.ToString("C2")</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
