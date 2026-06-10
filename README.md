@@ -1,4 +1,4 @@
-# Invoice Management System (ASP.NET Core MVC)
+# Pharmacy Invoice Management System (ASP.NET Core MVC)
 
 A robust, enterprise-grade ASP.NET Core MVC web application designed to handle complex invoicing operations. This project showcases an advanced **Master-Details Form Architecture** for handling multi-item pharmaceutical invoice transactions, integrated with database-level performance aggregation using **SQL Stored Procedures**, dynamic asynchronous validation, and reusable user-interface view components.
 
@@ -16,7 +16,6 @@ A robust, enterprise-grade ASP.NET Core MVC web application designed to handle c
 
 * **Framework:** .NET Core (MVC Pattern)
 * **Database:** Microsoft SQL Server
-* **Data Access:** ADO.NET / Dapper or Entity Framework Core executing optimized Stored Procedures
 * **Frontend:** Razor Pages Engine, Bootstrap 5, Vanilla JavaScript Engine / jQuery
 
 ---
